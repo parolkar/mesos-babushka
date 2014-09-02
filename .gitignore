@@ -1,0 +1,7 @@
+res/
+.redcar/
+mesos_home/.DS_Store
+mesos_home/.redcar/
+.vagrant/
+.DS_Store
+
