@@ -2,7 +2,7 @@ Babushka-Mesos
 ==============
 
 
-  This is very handy, Babushka based provisioning of Mesos Cluster
+  This is very handy, [Babushka](http://babushka.me/) based provisioning of Mesos Cluster
   
   
   ###Setup
