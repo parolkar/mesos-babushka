@@ -21,9 +21,28 @@ Vagrant::Config.run do |config|
   
   config.vm.define :mesos_slave_one do |box_config|
 
-    box_config.vm.network :hostonly, "192.178.0.102"
+    box_config.vm.network :hostonly, "192.178.0.201"
     box_config.vm.host_name = "mesos-slave-one.parolkar.com"
 
+  end
+  
+  config.vm.define :mesos_slave_two do |box_config|
+
+    box_config.vm.network :hostonly, "192.178.0.202"
+    box_config.vm.host_name = "mesos-slave-two.parolkar.com"
+
+  end
+  
+  config.vm.define :mesos_slave_three do |box_config|
+
+    box_config.vm.network :hostonly, "192.178.0.203"
+    box_config.vm.host_name = "mesos-slave-three.parolkar.com"
+
+  end
+  
+  config.vm.define :mesos_slave_four do |box_config|
+    box_config.vm.network :hostonly, "192.178.0.204"
+    box_config.vm.host_name = "mesos-slave-four.parolkar.com"
   end
 
 end
