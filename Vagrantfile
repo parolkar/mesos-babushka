@@ -16,7 +16,7 @@ Vagrant::Config.run do |config|
     
   end
 
-  config.vm.customize ["modifyvm", :id, "--memory", 2048]
+  config.vm.customize ["modifyvm", :id, "--memory", 1024]
   config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   
   config.vm.define :mesos_slave_one do |box_config|

@@ -38,7 +38,7 @@ dep 'mesos.src', :version do
   requires ['mesos.dir',
             'essentials.managed',
             'maven.bin']
-  source "http://mirror.nus.edu.sg/apache/mesos/#{version}/mesos-#{version}.tar.gz"
+  source "http://archive.apache.org/dist/mesos/#{version}/mesos-#{version}.tar.gz"
   
   install { sudo "make install" }
   
@@ -49,7 +49,7 @@ dep 'mesos profile' do
     "/etc/profile.d/mesos.sh".p.exists?
   }
   meet { 
-    ld_path = "LD_LIBRARY_PATH=\\$LD_LIBRARY_PATH:/usr/local/lib"
+    ld_path = "export LD_LIBRARY_PATH=\\$LD_LIBRARY_PATH:/usr/local/lib"
     `cat > /etc/profile.d/mesos.sh <<HERE
        #{ld_path}
 HERE
@@ -81,7 +81,19 @@ dep "maven.bin" do
 end
 
 
-dep 'mesos ssh access keys placed' do  #TODO: Parameterize this, so that key file name can be specified 
+
+dep "ssh.dir" do
+  met? {
+    "#{MESOS_CONFIG[:home_folder]}/.ssh".p.exists?
+  }
+  meet {
+    shell "mkdir #{MESOS_CONFIG[:home_folder]}/.ssh"
+    log "created directory."
+  }
+end
+ 
+dep'mesos ssh access keys placed' do  #TODO: Parameterize this, so that key file name can be specified 
+  requires ['ssh.dir']
   met? {
     "#{MESOS_CONFIG[:home_folder]}/.ssh/id_rsa".p.exists? &&  "#{MESOS_CONFIG[:home_folder]}/.ssh/authorized_keys".p.exists? 
   }
@@ -89,4 +101,27 @@ dep 'mesos ssh access keys placed' do  #TODO: Parameterize this, so that key fil
     `curl "https://gist.githubusercontent.com/parolkar/f9d0f10ed6aae2135095/raw/c45cb37907696bf75ec1279570722fdbc339db95/private-key" -k > #{MESOS_CONFIG[:home_folder]}/.ssh/id_rsa; chmod 600 #{MESOS_CONFIG[:home_folder]}/.ssh/id_rsa`
     `curl "https://gist.githubusercontent.com/parolkar/f9d0f10ed6aae2135095/raw/015e923a6ebd1e62200c273a12e9f2c18009baa8/public-key" -k > #{MESOS_CONFIG[:home_folder]}/.ssh/authorized_keys`
   }
+end
+
+
+dep "mesos master running" do
+    met? {
+      !(`pgrep mesos-master`.strip == "")
+    }
+    meet {
+      `source /etc/profile ; /usr/local/sbin/mesos-daemon.sh mesos-master --work_dir=/tmp --cluster=mesos-cluster --ip=192.178.0.101 </dev/null >/dev/null `
+    }
+end
+
+
+dep "mesos slave running" do
+    met? {
+      log("Slave Check: #{`pgrep mesos-slave`.strip}")
+      !(` pgrep mesos-slave`.strip == "")
+    }
+    meet {
+      `source /etc/profile ; /usr/local/sbin/mesos-daemon.sh mesos-slave --master=#{MESOS_CONFIG[:masters].first}:5050  </dev/null >/dev/null `
+      log("Slave Started: #{`pgrep mesos-slave`}")
+    }
+    
 end
