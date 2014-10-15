@@ -1,15 +1,10 @@
-MESOS_CONFIG={
- :masters => ["192.178.0.101"] ,
- :slaves =>  ["192.178.0.201","192.178.0.202","192.178.0.203","192.178.0.204"],
- :home_folder => "/root"
-
-}
+require File.join(File.dirname(__FILE__),'../cluster_config')
 
 
 dep 'mesos base' do
   requires ['mesos.dir',
             'essentials.managed',
-            'mesos.src',
+            'mesos.src'.with({:version => '0.19.0'}),
             'mesos profile',
             'mesos instance allocated',
             'mesos ssh access keys placed']
@@ -105,22 +100,31 @@ end
 
 
 dep "mesos master running" do
+    requires ['mesos base']
     met? {
       !(`pgrep mesos-master`.strip == "")
     }
     meet {
-      `source /etc/profile ; /usr/local/sbin/mesos-daemon.sh mesos-master --work_dir=/tmp --cluster=mesos-cluster --ip=192.178.0.101 </dev/null >/dev/null `
+      master_ip = MESOS_CONFIG[:masters].first
+      cmd = "source /etc/profile ; /usr/local/sbin/mesos-daemon.sh mesos-master --work_dir=/tmp --cluster=mesos-cluster --ip=192.178.0.101 </dev/null >/dev/null "
+      log("Attempting to execute: #{cmd}")
+       `/bin/bash -c "#{cmd}"`
     }
 end
 
 
-dep "mesos slave running" do
+dep "mesos slave running" , :slave_id  do
+    requires ['mesos base']
+    slave_id.default('0')
     met? {
       log("Slave Check: #{`pgrep mesos-slave`.strip}")
       !(` pgrep mesos-slave`.strip == "")
     }
     meet {
-      `source /etc/profile ; /usr/local/sbin/mesos-daemon.sh mesos-slave --master=#{MESOS_CONFIG[:masters].first}:5050  </dev/null >/dev/null `
+       slave_ip = MESOS_CONFIG[:slaves][slave_id.to_s.to_i]
+       cmd = "source /etc/profile; /usr/local/sbin/mesos-daemon.sh  mesos-slave --master=#{MESOS_CONFIG[:masters].first}:5050 --hostname=#{slave_ip} --ip=#{slave_ip}"
+       log("Attempting to execute: #{cmd}")
+      `/bin/bash -c "#{cmd}  </dev/null >/dev/null" `
       log("Slave Started: #{`pgrep mesos-slave`}")
     }
     
