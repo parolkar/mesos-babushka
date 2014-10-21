@@ -5,13 +5,16 @@ Babushka-Mesos
   This is very handy, [Babushka](http://babushka.me/) based provisioning of Mesos Cluster
   
   
-  ###Setup
+###Setup
 
- Here is a 2 minute guide to bringup mesos cluster on your local computer with 5 VMs
+ Here is a 2 minute screencast to bring-up mesos cluster on your computer with 5 VMs
 
 
- <iframe src="//player.vimeo.com/video/109466844" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="http://vimeo.com/109466844">2 min guide to mesos setup with vagrant & babushka</a> from <a href="https://github.com/parolkar">@parolkar</a> </p>
-  
+ <p><a href="http://vimeo.com/109466844" target="_blank_"><img src="https://i.vimeocdn.com/video/493425314_300x168.jpg"><br> 2 min guide to mesos setup with vagrant & babushka</a> from <a href="https://github.com/parolkar">@parolkar</a> </p>
+ 
+ 
+####Steps
+ 
  * Get [Vagrant](https://www.vagrantup.com/)
  * Clone this repository (git clone <repo_url> babushka-mesos)
  * $ cd babushka-mesos; 
@@ -24,6 +27,12 @@ Babushka-Mesos
     * (vagrant)# ruby provision.rb        #This will do all magic & may take few minutes based on your network
  * visit http://192.178.0.101:5050 to see Mesos Dashboard
 
+
+  
+####Bonus Tips
+
+ * You could use this to provision cluster in Docker, AWS, RackSpace, DigitalOcean etc. Check [Vagrant providers](https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins#providers)
+ * To customize configuration, look at cluster_config.rb and babushka-deps.
 
   
 
