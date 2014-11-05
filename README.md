@@ -34,6 +34,10 @@ Babushka-Mesos
  * You could use this to provision cluster in Docker, AWS, RackSpace, DigitalOcean etc. Check [Vagrant providers](https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins#providers)
  * To customize configuration, look at cluster_config.rb and babushka-deps.
 
+####Ideas? What can I do with this provisioning?
+
+ * You can quickly build and demonstrate potential of mesos. Example, [building resilient web infrastructure with Vulcanproxy, wordpress, MariaDB Galera Cluster & Marathon (2 min video)](http://vimeo.com/110914075). 
+
   
 
 -----------------------
