@@ -1,6 +1,8 @@
 Babushka-Mesos
 ==============
 
+[![Join the chat at https://gitter.im/parolkar/mesos-babushka](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/parolkar/mesos-babushka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
   This is very handy, [Babushka](http://babushka.me/) based provisioning of Mesos Cluster
   
